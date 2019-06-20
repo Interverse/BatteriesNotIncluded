@@ -65,14 +65,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Commands\Quit.cs" />
+    <Compile Include="Framework\Managers\ArenaManager.cs" />
+    <Compile Include="Framework\Managers\CommandManager.cs" />
+    <Compile Include="Framework\Arena.cs" />
     <Compile Include="Framework\Database.cs" />
+    <Compile Include="Framework\Extensions\TSPlayerExtension.cs" />
+    <Compile Include="Framework\ICommand.cs" />
     <Compile Include="Framework\Minigame.cs" />
     <Compile Include="Framework\MiscUtils.cs" />
+    <Compile Include="Framework\Network\DataHandler.cs" />
+    <Compile Include="Framework\Network\Packets\ItemOwnerArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ModifyTilesArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerDeathArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerHurtArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerSlotArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerSpawnArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerUpdateArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ProjectileDestroyArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ProjectileNewArgs.cs" />
+    <Compile Include="Framework\Network\Packets\TogglePvPArgs.cs" />
+    <Compile Include="Framework\Commands\SetupArena.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Minigames\Duel\Duel.cs" />
+    <Compile Include="Minigames\Duel\DuelArena.cs" />
+    <Compile Include="Minigames\Duel\DuelCommand.cs" />
+    <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Minigames\" />
+    <Folder Include="Minigames\CTF\" />
+    <Folder Include="Minigames\Splatoon\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

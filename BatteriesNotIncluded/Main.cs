@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BatteriesNotIncluded.Framework;
-using MySql.Data.MySqlClient;
-using Terraria.GameContent.Generation;
+using BatteriesNotIncluded.Framework.Managers;
+using BatteriesNotIncluded.Framework.Network;
 using TerrariaApi.Server;
-using TShockAPI.DB;
+using TShockAPI;
 
 namespace BatteriesNotIncluded {
     [ApiVersion(2, 1)]
     public class Main : TerrariaPlugin {
+        public static List<Minigame> Minigames = new List<Minigame>();
+        public static ArenaManager ArenaManager;
+        public static CommandManager CommandManager;
+        public static Database ArenaDatabase;
         public static Main Instance;
 
         public override string Name => "BatteriesNotIncluded";
@@ -23,14 +28,45 @@ namespace BatteriesNotIncluded {
 
         public override void Initialize() {
             Instance = this;
+
+            ArenaDatabase = new Database("GamemodeArenas").ConnectDB();
+            ArenaManager = new ArenaManager();
+            CommandManager = new CommandManager();
+
+            ServerApi.Hooks.NetGetData.Register(this, GetData);
         }
 
-        public void RegisterGame(Minigame mg) {
-            ServerApi.Hooks.NetGetData.Register(this, mg.OnGameRunning);
+        protected override void Dispose(bool disposing) {
+            if (disposing) {
+                foreach (var minigame in Minigames) {
+                    ServerApi.Hooks.GameUpdate.Deregister(Instance, minigame.OnGameUpdate);
+
+                    ServerApi.Hooks.NetGetData.Deregister(this, GetData);
+                }
+                Minigames.Clear();
+            }
+            base.Dispose(disposing);
         }
 
-        public void DeregisterGame(Minigame mg) {
-            ServerApi.Hooks.NetGetData.Deregister(this, mg.OnGameRunning);
+        public static void AddMinigame(Minigame mg) {
+            Minigames.Add(mg);
+        }
+
+        public static void RemoveMinigame(Minigame mg) {
+            Minigames.Remove(mg);
+        }
+
+        /// <summary>
+        /// Processes data so it can be used in <see cref="DataHandler"/>.
+        /// </summary>
+        /// <param name="args">The data needed to be processed.</param> 
+        private void GetData(GetDataEventArgs args) {
+            MemoryStream data = new MemoryStream(args.Msg.readBuffer, args.Index, args.Length);
+            TSPlayer attacker = TShock.Players[args.Msg.whoAmI];
+
+            if (attacker == null || !attacker.TPlayer.active || !attacker.ConnectionAlive) return;
+
+            DataHandler.HandleData(args, data, attacker);
         }
     }
 }

@@ -47,20 +47,16 @@ namespace BatteriesNotIncluded.Framework {
             } else
                 throw new Exception("Invalid storage type.");
 
+            return this;
+        }
+
+        public Database CreateTable(SqlTable table) {
             var sqlCreator = new SqlTableCreator(db,
                 IsMySql
                     ? (IQueryBuilder)new MysqlQueryCreator()
                     : (IQueryBuilder)new SqliteQueryCreator());
 
-            foreach (var table in _tables) {
-                sqlCreator.EnsureTableStructure(table);
-            }
-
-            return this;
-        }
-
-        public Database CreateTable(SqlTable table) {
-            _tables.Add(table);
+            sqlCreator.EnsureTableStructure(table);
             return this;
         }
 
@@ -98,8 +94,8 @@ namespace BatteriesNotIncluded.Framework {
         /// </summary>
         /// <param name="table">The table to delete from</param>
         /// <param name="id">The ID of the data being deleted</param>
-        public void DeleteRow(string table, int id) {
-            Query("DELETE FROM {0} WHERE ID = {1}".SFormat(table, id));
+        public void DeleteRow(string table, string name) {
+            Query("DELETE FROM {0} WHERE Name = {1}".SFormat(table, name.SqlString()));
         }
 
         /// <summary>

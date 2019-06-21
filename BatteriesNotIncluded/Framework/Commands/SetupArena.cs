@@ -18,10 +18,11 @@ namespace BatteriesNotIncluded.Framework.Commands {
         public static string ArenaHelp = InvalidSyntax + "\n" + CreateHelp + "\n" + DeleteHelp + "\n" + ListHelp;
         public static List<Arena> ArenaTypes = null;
 
+        // Permissions: bni.arena and bni.arenacreate
         public IEnumerable<Command> GetCommands() {
             ArenaTypes = MiscUtils.InstantiateClassesOfAbstract<Arena>();
             DataHandler.OnPlayerGetData += GetBlockPoints;
-            yield return new Command("bni.arenacreate", CreateArena, "arena");
+            yield return new Command("bni.arena", CreateArena, "arena");
         }
 
         private void GetBlockPoints(object sender, EventArgs e) {
@@ -31,7 +32,7 @@ namespace BatteriesNotIncluded.Framework.Commands {
 
             var player = tileUpdate.Player;
 
-            player.SetCurrentVector(new Vector2(tileUpdate.TileX * 16 - 8, tileUpdate.TileY * 16 - 32));
+            player.SetCurrentVector(new Vector2(tileUpdate.TileX * 16 - 7, tileUpdate.TileY * 16 - 32));
             NetMessage.SendTileSquare(player.Index, tileUpdate.TileX, tileUpdate.TileY, 1);
 
             string nextVector = player.GetNextPendingVector();
@@ -61,6 +62,11 @@ namespace BatteriesNotIncluded.Framework.Commands {
 
             switch (input[0].ToLower()) {
                 case "create":
+                    if (!player.HasPermission("bni.arenacreate")) {
+                        player.SendErrorMessage("You do not have permission to create an arena!");
+                        return;
+                    }
+
                     if (input.Count < 3) {
                         player.SendErrorMessage(InvalidSyntax + CreateHelp);
                         return;
@@ -103,6 +109,11 @@ namespace BatteriesNotIncluded.Framework.Commands {
                     break;
 
                 case "delete":
+                    if (!player.HasPermission("bni.arenacreate")) {
+                        player.SendErrorMessage("You do not have permission to delete arenas!");
+                        return;
+                    }
+
                     if (input.Count < 2) {
                         player.SendErrorMessage(InvalidSyntax + DeleteHelp);
                         return;
@@ -166,10 +177,15 @@ namespace BatteriesNotIncluded.Framework.Commands {
                     break;
 
                 case "cancel":
-                    player.SendInfoMessage("Cancelled arena creation.");
-                    player.SetGamemode(default);
-                    player.SetArenaEdit(default);
-                    player.SetPendingVectors(default);
+                    if (player.GetArenaEdit() != null) {
+                        player.SendInfoMessage("Cancelled arena creation.");
+                        player.SetGamemode(default);
+                        player.SetArenaEdit(default);
+                        player.SetPendingVectors(default);
+                    } else {
+                        player.SendErrorMessage("You are not currently creating any arenas.");
+                    }
+                    
                     break;
 
                 default:

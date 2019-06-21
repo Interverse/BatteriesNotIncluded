@@ -9,9 +9,7 @@ using TerrariaApi.Server;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class ModifyTilesArgs : EventArgs {
-        public TSPlayer Player;
-
+    public class ModifyTilesArgs : TerrariaPacket {
         public byte Action;
         public int TileX;
         public int TileY;

@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class PlayerSpawnArgs : EventArgs {
-        public TSPlayer Player;
-
+    public class PlayerSpawnArgs : TerrariaPacket {
         public int SpawnX;
         public int SpawnY;
 

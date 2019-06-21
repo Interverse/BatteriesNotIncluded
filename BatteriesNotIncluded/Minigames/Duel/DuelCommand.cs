@@ -70,11 +70,11 @@ namespace BatteriesNotIncluded.Minigames.Duel {
             }
 
             opponent.SetPendingDuel(player);
-            Main.AddMinigame(new Duel(player, opponent, arenas.SelectRandom() as DuelArena));
+            new Duel(player, opponent, arenas.SelectRandom() as DuelArena);
         }
 
         public IEnumerable<Command> GetCommands() {
-            yield return new Command(Duel, "duel");
+            yield return new Command("bni.duel", Duel, "duel");
         }
     }
 }

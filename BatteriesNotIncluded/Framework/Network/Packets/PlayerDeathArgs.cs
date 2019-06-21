@@ -2,9 +2,7 @@
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class PlayerDeathArgs : EventArgs {
-        public TSPlayer Player;
-
+    public class PlayerDeathArgs : TerrariaPacket {
         public PlayerDeathArgs(TSPlayer player) {
             Player = player;
         }

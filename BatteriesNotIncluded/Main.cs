@@ -13,7 +13,7 @@ using TShockAPI;
 namespace BatteriesNotIncluded {
     [ApiVersion(2, 1)]
     public class Main : TerrariaPlugin {
-        public static List<Minigame> Minigames = new List<Minigame>();
+        public static Minigame ActiveVote;
         public static ArenaManager ArenaManager;
         public static CommandManager CommandManager;
         public static Database ArenaDatabase;
@@ -38,22 +38,11 @@ namespace BatteriesNotIncluded {
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                foreach (var minigame in Minigames) {
-                    ServerApi.Hooks.GameUpdate.Deregister(Instance, minigame.OnGameUpdate);
+                ServerApi.Hooks.GameUpdate.Deregister(Instance, ActiveVote.OnGameUpdate);
 
-                    ServerApi.Hooks.NetGetData.Deregister(this, GetData);
-                }
-                Minigames.Clear();
+                ServerApi.Hooks.NetGetData.Deregister(this, GetData);
             }
             base.Dispose(disposing);
-        }
-
-        public static void AddMinigame(Minigame mg) {
-            Minigames.Add(mg);
-        }
-
-        public static void RemoveMinigame(Minigame mg) {
-            Minigames.Remove(mg);
         }
 
         /// <summary>

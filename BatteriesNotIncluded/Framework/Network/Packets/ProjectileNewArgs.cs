@@ -7,7 +7,7 @@ using TerrariaApi.Server;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class ProjectileNewArgs : EventArgs {
+    public class ProjectileNewArgs : TerrariaPacket {
         
         public GetDataEventArgs Args;
 

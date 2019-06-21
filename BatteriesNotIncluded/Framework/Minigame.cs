@@ -21,17 +21,18 @@ namespace BatteriesNotIncluded.Framework {
         public Minigame(Arena arena) {
             ActiveArena = arena;
             ActiveArena.Available = false;
-            Main.AddMinigame(this);
             ServerApi.Hooks.GameUpdate.Register(Main.Instance, OnGameUpdate);
             DataHandler.OnPlayerGetData += HandlePlayerData;
         }
 
         public virtual void AddPlayer(TSPlayer player) {
-            Players.Add(player);
+            if (!Players.Contains(player)) {
+                Players.Add(player);
+            }
         }
 
         public virtual void OnGameUpdate(EventArgs args) {
-            Console.WriteLine(_state.ToString());
+            //Console.WriteLine(_state.ToString());
             switch (_state) {
                 case GameState.Initializing:
                     Initialize();
@@ -74,13 +75,17 @@ namespace BatteriesNotIncluded.Framework {
                     UpdatePlayers();
                     SetPvP(ForcePvP);
 
-                    if (HasFinished())
+                    if (HasFinished() || InsufficientPlayers())
                         _state = GameState.Finished;
 
                     break;
 
                 case GameState.Finished:
-                    OnFinished();
+                    if (InsufficientPlayers()) {
+                        OnFailedFinished();
+                    } else {
+                        OnFinished();
+                    }
                     SetPvP(false);
                     _state = GameState.Cleanup;
                     break;
@@ -92,7 +97,6 @@ namespace BatteriesNotIncluded.Framework {
                         player.SetGamemode(default);
                         player.SpawnOnOldPosition();
                     }
-                    Main.RemoveMinigame(this);
                     ServerApi.Hooks.GameUpdate.Deregister(Main.Instance, OnGameUpdate);
                     DataHandler.OnPlayerGetData -= HandlePlayerData;
                     ActiveArena.Available = true;
@@ -156,13 +160,20 @@ namespace BatteriesNotIncluded.Framework {
         public abstract void OnFinished();
 
         /// <summary>
+        /// Method is called when there are insufficient players to continue the game.
+        /// </summary>
+        public abstract void OnFailedFinished();
+
+        /// <summary>
         /// Method is called after the game is finished.
         /// </summary>
         public virtual void OnCleanup() { }
 
-        public virtual void OnPlayerData(EventArgs e) { }
+        public virtual void OnPlayerData(TerrariaPacket e) { }
 
-        private void HandlePlayerData(object sender, EventArgs e) {
+        private void HandlePlayerData(object sender, TerrariaPacket e) {
+            if (!Players.Contains(e.Player)) return;
+
             OnPlayerData(e);
 
             var spawn = e as PlayerSpawnArgs;
@@ -172,14 +183,14 @@ namespace BatteriesNotIncluded.Framework {
         }
 
         /// <summary>
-        /// Called in both GameRunning and GameFinished to toggle people's pvp status.
+        /// Sets players's pvp status in the current minigame.
         /// </summary>
         public virtual void SetPvP(bool on) {
             for (int index = 0; index < Players.Count; index++) {
                 TSPlayer player = Players[index];
                 if (player.TPlayer.hostile != on) {
                     player.TPlayer.hostile = on;
-                    NetMessage.SendData((int)PacketTypes.TogglePvp);
+                    NetMessage.SendData((int)PacketTypes.TogglePvp, -1, -1, null, player.Index);
                 }
             }
         }

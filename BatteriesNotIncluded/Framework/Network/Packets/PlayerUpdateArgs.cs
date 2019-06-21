@@ -4,9 +4,7 @@ using System.IO.Streams;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class PlayerUpdateArgs : EventArgs {
-        public TSPlayer Player;
-
+    public class PlayerUpdateArgs : TerrariaPacket {
         public int PlayerAction;
         public int Pulley;
         public int SelectedSlot;

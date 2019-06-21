@@ -4,8 +4,7 @@ using System.IO.Streams;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class PlayerSlotArgs : EventArgs {
-        public TSPlayer Player;
+    public class PlayerSlotArgs : TerrariaPacket {
         public byte SlotId;
         public short Stack;
         public byte Prefix;

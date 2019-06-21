@@ -9,7 +9,7 @@ namespace BatteriesNotIncluded.Framework.Network {
     /// Creates hooks for plugins to use.
     /// </summary>
     public class DataHandler {
-        public static event EventHandler<EventArgs> OnPlayerGetData;
+        public static event EventHandler<TerrariaPacket> OnPlayerGetData;
 
         public static void HandleData(GetDataEventArgs args, MemoryStream data, TSPlayer player) {
             switch (args.MsgID) {
@@ -51,6 +51,10 @@ namespace BatteriesNotIncluded.Framework.Network {
 
                 case PacketTypes.PlayerSpawn:
                     OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerSpawnArgs(data, player));
+                    return;
+
+                case PacketTypes.PlayerTeam:
+                    OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerTeamArgs(data, player));
                     return;
             }
         }

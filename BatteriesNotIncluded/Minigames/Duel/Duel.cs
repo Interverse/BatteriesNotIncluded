@@ -77,8 +77,6 @@ namespace BatteriesNotIncluded.Minigames.Duel {
 
         public override bool Countdown() {
             if ((DateTime.Now - _respawnTimer).TotalMilliseconds >= _respawnDelay) {
-                DuelArena arena = ActiveArena as DuelArena;
-
                 challenger.SpawnOnSpawnPoint();
                 opponent.SpawnOnSpawnPoint();
 
@@ -122,20 +120,22 @@ namespace BatteriesNotIncluded.Minigames.Duel {
         }
 
         public override bool HasFinished() {
-            return _challengerScore == 5 || _opponentScore == 5 || InsufficientPlayers();
+            return _challengerScore == 5 || _opponentScore == 5;
         }
 
         public override void OnFinished() {
             string winner = _challengerScore == 5 ? challenger.Name : opponent.Name;
 
-            if (InsufficientPlayers()) {
-                SendMessageToAllPlayers("Duel ended due to opponent leaving.", Color.Cyan);
-            } else {
-                string scoreMessage = $"{winner} has won the duel! {_scoreText}";
+            string scoreMessage = $"{winner} has won the duel! {_scoreText}";
 
-                TShock.Utils.Broadcast(scoreMessage, Color.Cyan);
-            }
+            TShock.Utils.Broadcast(scoreMessage, Color.Cyan);
+        }
 
+        public override void OnFailedFinished() {
+            SendMessageToAllPlayers("Duel ended due to opponent leaving.", Color.Cyan);
+        }
+
+        public override void OnCleanup() {
             opponent.SetDuelAccept(false);
             opponent.SetPendingDuel(default);
         }

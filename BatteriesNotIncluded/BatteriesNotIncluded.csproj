@@ -81,21 +81,23 @@
     <Compile Include="Framework\Network\Packets\PlayerHurtArgs.cs" />
     <Compile Include="Framework\Network\Packets\PlayerSlotArgs.cs" />
     <Compile Include="Framework\Network\Packets\PlayerSpawnArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerTeamArgs.cs" />
     <Compile Include="Framework\Network\Packets\PlayerUpdateArgs.cs" />
     <Compile Include="Framework\Network\Packets\ProjectileDestroyArgs.cs" />
     <Compile Include="Framework\Network\Packets\ProjectileNewArgs.cs" />
+    <Compile Include="Framework\Network\Packets\TerrariaPacket.cs" />
     <Compile Include="Framework\Network\Packets\TogglePvPArgs.cs" />
     <Compile Include="Framework\Commands\SetupArena.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Minigames\CTF\CTF.cs" />
+    <Compile Include="Minigames\CTF\CTFArena.cs" />
+    <Compile Include="Minigames\CTF\CTFCommand.cs" />
     <Compile Include="Minigames\Duel\Duel.cs" />
     <Compile Include="Minigames\Duel\DuelArena.cs" />
     <Compile Include="Minigames\Duel\DuelCommand.cs" />
     <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Minigames\CTF\" />
-    <Folder Include="Minigames\Splatoon\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

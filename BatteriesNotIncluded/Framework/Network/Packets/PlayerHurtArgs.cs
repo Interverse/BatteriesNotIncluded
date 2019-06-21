@@ -7,7 +7,7 @@ using TerrariaApi.Server;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework.Network.Packets {
-    public class PlayerHurtArgs : EventArgs {
+    public class PlayerHurtArgs : TerrariaPacket {
         public GetDataEventArgs Args;
 
         public int PlayerID;

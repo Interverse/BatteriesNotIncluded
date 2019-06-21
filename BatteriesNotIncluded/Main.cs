@@ -38,7 +38,9 @@ namespace BatteriesNotIncluded {
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                ServerApi.Hooks.GameUpdate.Deregister(Instance, ActiveVote.OnGameUpdate);
+                if (ActiveVote != null) {
+                    ServerApi.Hooks.GameUpdate.Deregister(Instance, ActiveVote.OnGameUpdate);
+                }
 
                 ServerApi.Hooks.NetGetData.Deregister(this, GetData);
             }

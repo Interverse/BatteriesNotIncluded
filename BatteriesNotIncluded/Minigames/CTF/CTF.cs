@@ -106,7 +106,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 if (!Players.Contains(RedTeam[index])) {
                     if (_blueFlagHolder == RedTeam[index]) {
                         _blueFlagHolder = null;
-                        SendMessageToAllPlayers($"{RedTeam[index].Name}'s player has dropped.");
+                        SendMessageToAllPlayers($"{RedTeam[index].Name}'s flag has dropped.");
                     }
                     RedTeam.Remove(RedTeam[index]);
                     index--;
@@ -117,7 +117,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 if (!Players.Contains(BlueTeam[index])) {
                     if (_redFlagHolder == BlueTeam[index]) {
                         _redFlagHolder = null;
-                        SendMessageToAllPlayers($"{BlueTeam[index].Name}'s player has dropped.");
+                        SendMessageToAllPlayers($"{BlueTeam[index].Name}'s flag has dropped.");
                     }
                     BlueTeam.Remove(BlueTeam[index]);
                     index--;
@@ -149,14 +149,14 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                     SendMessageToAllPlayers($"{_blueFlagHolder.Name} has picked up the blue flag!", Color.Turquoise);
                 }
 
-                // Placing flags at base
-                if (_redFlagHolder != null && _redFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.BlueSpawn) < 2 * 16 && BlueTeam.Contains(e.Player)) {
-                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has scored for the red team!", Color.OrangeRed);
+                // Placing flags at base flag
+                if (_redFlagHolder != null && _redFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.BlueFlag) < 2 * 16 && BlueTeam.Contains(e.Player) && !e.Player.TPlayer.dead) {
+                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has scored for the blue team!", Color.OrangeRed);
                     _redFlagHolder = null;
                     _blueScore += 1;
                     SendMessageToAllPlayers($"Score: {_scoreText}", Color.Cyan);
-                } else if (_blueFlagHolder != null && _blueFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.RedSpawn) < 2 * 16 && RedTeam.Contains(e.Player)) {
-                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has scored for the blue team!", Color.Turquoise);
+                } else if (_blueFlagHolder != null && _blueFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.RedFlag) < 2 * 16 && RedTeam.Contains(e.Player) && !e.Player.TPlayer.dead) {
+                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has scored for the red team!", Color.Turquoise);
                     _blueFlagHolder = null;
                     _redScore += 1;
                     SendMessageToAllPlayers($"Score: {_scoreText}", Color.Cyan);

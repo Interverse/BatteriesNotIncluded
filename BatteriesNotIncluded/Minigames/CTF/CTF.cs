@@ -143,10 +143,10 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 // Picking up flags
                 if (_redFlagHolder == null && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.RedFlag) < 2 * 16 && BlueTeam.Contains(e.Player)) {
                     _redFlagHolder = e.Player;
-                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has picked up the red flag!", Color.Turquoise);
+                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has picked up the red flag!", Color.OrangeRed);
                 } else if (_blueFlagHolder == null && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.BlueFlag) < 2 * 16 && RedTeam.Contains(e.Player)) {
                     _blueFlagHolder = e.Player;
-                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has picked up the blue flag!", Color.OrangeRed);
+                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has picked up the blue flag!", Color.Turquoise);
                 }
 
                 // Placing flags at base flag

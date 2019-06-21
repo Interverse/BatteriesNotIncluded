@@ -143,20 +143,20 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 // Picking up flags
                 if (_redFlagHolder == null && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.RedFlag) < 2 * 16 && BlueTeam.Contains(e.Player)) {
                     _redFlagHolder = e.Player;
-                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has picked up the red flag!", Color.OrangeRed);
+                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has picked up the red flag!", Color.Turquoise);
                 } else if (_blueFlagHolder == null && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.BlueFlag) < 2 * 16 && RedTeam.Contains(e.Player)) {
                     _blueFlagHolder = e.Player;
-                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has picked up the blue flag!", Color.Turquoise);
+                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has picked up the blue flag!", Color.OrangeRed);
                 }
 
                 // Placing flags at base flag
                 if (_redFlagHolder != null && _redFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.BlueFlag) < 2 * 16 && BlueTeam.Contains(e.Player) && !e.Player.TPlayer.dead) {
-                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has scored for the blue team!", Color.OrangeRed);
+                    SendMessageToAllPlayers($"{_redFlagHolder.Name} has scored for the blue team!", Color.Turquoise);
                     _redFlagHolder = null;
                     _blueScore += 1;
                     SendMessageToAllPlayers($"Score: {_scoreText}", Color.Cyan);
                 } else if (_blueFlagHolder != null && _blueFlagHolder == e.Player && Vector2.Distance(new Vector2(playerUpdate.PositionX, playerUpdate.PositionY), arena.RedFlag) < 2 * 16 && RedTeam.Contains(e.Player) && !e.Player.TPlayer.dead) {
-                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has scored for the red team!", Color.Turquoise);
+                    SendMessageToAllPlayers($"{_blueFlagHolder.Name} has scored for the red team!", Color.OrangeRed);
                     _blueFlagHolder = null;
                     _redScore += 1;
                     SendMessageToAllPlayers($"Score: {_scoreText}", Color.Cyan);

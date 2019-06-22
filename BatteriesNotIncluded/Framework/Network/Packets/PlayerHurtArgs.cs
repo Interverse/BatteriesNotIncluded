@@ -17,7 +17,7 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public byte Flags;
         public sbyte CooldownCounter;
 
-        public PlayerHurtArgs(GetDataEventArgs args, MemoryStream data) {
+        public PlayerHurtArgs(GetDataEventArgs args, MemoryStream data, TSPlayer player) : base(player) {
             Args = args;
             PlayerID = data.ReadByte();
             PlayerHitReason = PlayerDeathReason.FromReader(new BinaryReader(data));

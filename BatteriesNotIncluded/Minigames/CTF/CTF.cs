@@ -179,7 +179,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         }
 
         public override bool HasFinished() {
-            return _redScore == 3 || _blueScore == 3 || InsufficientPlayers();
+            return _redScore == 3 || _blueScore == 3;
         }
 
         public override bool InsufficientPlayers() {
@@ -187,7 +187,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         }
 
         public override void OnFinished() {
-            string winText = "";
+            string winText = "(CTF) ";
             List<string> winners = new List<string>();
 
             if (_redScore == 3) {

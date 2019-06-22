@@ -44,22 +44,22 @@ namespace BatteriesNotIncluded.Framework {
                         if (!HasVoteSucceeded()) {
                             FailStart();
                             _state = GameState.Cleanup;
-                            break;
+                        } else {
+                            foreach (var player in Players) {
+                                player.SetGamemode(GamemodeName);
+                            }
+                            _state = GameState.StartGame;
                         }
 
                         foreach (var player in Players) {
-                            player.SetGamemode(GamemodeName);
+                            player.SetOldPosition(player.LastNetPosition);
                         }
 
-                        _state = GameState.StartGame;
+                        Main.ActiveVote = null;
                     }
                     break;
 
                 case GameState.StartGame:
-                    foreach (var player in Players) {
-                        player.SetOldPosition(player.LastNetPosition);
-                    }
-
                     StartGame();
                     _state = GameState.Countdown;
                     break;
@@ -95,7 +95,9 @@ namespace BatteriesNotIncluded.Framework {
 
                     foreach (var player in Players) {
                         player.SetGamemode(default);
+                        player.SetTeam(0);
                         player.SpawnOnOldPosition();
+                        player.ClearInterface();
                     }
                     ServerApi.Hooks.GameUpdate.Deregister(Main.Instance, OnGameUpdate);
                     DataHandler.OnPlayerGetData -= HandlePlayerData;
@@ -220,6 +222,10 @@ namespace BatteriesNotIncluded.Framework {
             foreach (var player in Players) {
                 player.SendMessage(message, Color.Yellow);
             }
+        }
+
+        internal GameState GetGameState() {
+            return _state;
         }
     }
 

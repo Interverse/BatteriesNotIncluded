@@ -10,10 +10,9 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public byte Prefix;
         public short NetID;
 
-        public PlayerSlotArgs(MemoryStream data, TSPlayer player) {
+        public PlayerSlotArgs(MemoryStream data, TSPlayer player) : base(player) {
             data.ReadByte(); //Passes through the PlayerID data
 
-            Player = player;
             SlotId = (byte)data.ReadByte();
             Stack = data.ReadInt16();
             Prefix = (byte)data.ReadByte();

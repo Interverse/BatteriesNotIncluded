@@ -13,10 +13,8 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public float VelocityX;
         public float VelocityY;
 
-        public PlayerUpdateArgs(MemoryStream data, TSPlayer player) {
-            data.ReadByte();
-
-            Player = player;
+        public PlayerUpdateArgs(MemoryStream data, TSPlayer player) : base(player) {
+            data.ReadByte(); // Player ID
             PlayerAction = data.ReadByte();
             Pulley = data.ReadByte();
             SelectedSlot = data.ReadByte();

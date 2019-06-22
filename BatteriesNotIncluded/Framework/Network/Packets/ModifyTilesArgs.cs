@@ -25,9 +25,7 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         /// </summary>
         public int Var2;
 
-        public ModifyTilesArgs(MemoryStream data, TSPlayer player) {
-            Player = player;
-
+        public ModifyTilesArgs(MemoryStream data, TSPlayer player) : base(player) {
             Action = (byte)data.ReadByte();
             TileX = data.ReadInt16();
             TileY = data.ReadInt16();

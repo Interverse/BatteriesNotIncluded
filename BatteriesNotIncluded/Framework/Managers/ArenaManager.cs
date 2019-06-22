@@ -23,9 +23,9 @@ namespace BatteriesNotIncluded.Framework.Managers {
             }
         }
 
-        public IEnumerable<Arena> GetAvailableArenas<T>(string name = "") {
-            if (name != "") {
-                Arenas.Find(c => c.GetType() == typeof(T) && c.Available && c.Name == name);
+        public IEnumerable<Arena> GetAvailableArenas<T>(string name = default) {
+            if (name != default) {
+                return Arenas.FindAll(c => c.GetType() == typeof(T) && c.Available && c.Name == name);
             }
             return Arenas.FindAll(c => c.GetType() == typeof(T) && c.Available);
         }

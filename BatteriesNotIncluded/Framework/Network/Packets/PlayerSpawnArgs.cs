@@ -12,9 +12,7 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public int SpawnX;
         public int SpawnY;
 
-        public PlayerSpawnArgs(MemoryStream data, TSPlayer player) {
-            Player = player;
-
+        public PlayerSpawnArgs(MemoryStream data, TSPlayer player) : base(player) {
             SpawnX = data.ReadInt16();
             SpawnY = data.ReadInt16();
         }

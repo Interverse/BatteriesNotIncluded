@@ -88,6 +88,7 @@
     <Compile Include="Framework\Network\Packets\TerrariaPacket.cs" />
     <Compile Include="Framework\Network\Packets\TogglePvPArgs.cs" />
     <Compile Include="Framework\Commands\SetupArena.cs" />
+    <Compile Include="Framework\SidebarInterface.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Minigames\CTF\CTF.cs" />
     <Compile Include="Minigames\CTF\CTFArena.cs" />
@@ -96,6 +97,9 @@
     <Compile Include="Minigames\Duel\DuelArena.cs" />
     <Compile Include="Minigames\Duel\DuelCommand.cs" />
     <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
+    <Compile Include="Minigames\Splatoon\Splatoon.cs" />
+    <Compile Include="Minigames\Splatoon\SplatoonArena.cs" />
+    <Compile Include="Minigames\Splatoon\SplatoonCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

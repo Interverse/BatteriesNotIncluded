@@ -17,7 +17,7 @@ namespace BatteriesNotIncluded.Framework.Extensions {
         }
 
         public static void SetGamemodeSpawnPoint(this TSPlayer player, Vector2 spawn) {
-            player.SetData("GamemodeSpawnPoint", spawn);
+            player.SetData("GamemodeSpawnPoint", spawn - new Vector2(7, 32));
         }
 
         public static Vector2 GetGamemodeSpawnPoint(this TSPlayer player) {

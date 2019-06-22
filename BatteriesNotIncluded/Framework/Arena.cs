@@ -2,9 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TShockAPI.DB;
 
 namespace BatteriesNotIncluded.Framework {
@@ -14,7 +12,7 @@ namespace BatteriesNotIncluded.Framework {
 
         public bool Available = true;
 
-        public IEnumerable<Arena> GetArenas() {
+        public virtual IEnumerable<Arena> GetArenas() {
             Type arenaType = GetType();
 
             List<SqlColumn> sqlColumns = new List<SqlColumn>();
@@ -45,7 +43,7 @@ namespace BatteriesNotIncluded.Framework {
             }
         }
 
-        public void InsertArena() {
+        public virtual void InsertArena() {
             StringBuilder sb = new StringBuilder();
 
             sb.Append($"INSERT INTO {Type} VALUES (");

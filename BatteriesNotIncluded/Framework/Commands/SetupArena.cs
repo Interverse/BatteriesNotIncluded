@@ -32,7 +32,7 @@ namespace BatteriesNotIncluded.Framework.Commands {
 
             var player = tileUpdate.Player;
 
-            player.SetCurrentVector(new Vector2(tileUpdate.TileX * 16 - 7, tileUpdate.TileY * 16 - 32));
+            player.SetCurrentVector(new Vector2(tileUpdate.TileX * 16, tileUpdate.TileY * 16));
             NetMessage.SendTileSquare(player.Index, tileUpdate.TileX, tileUpdate.TileY, 1);
 
             string nextVector = player.GetNextPendingVector();

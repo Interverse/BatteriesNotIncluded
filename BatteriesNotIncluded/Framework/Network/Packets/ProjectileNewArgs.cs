@@ -23,7 +23,7 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public float Ai1;
         public float[] Ai;
 
-        public ProjectileNewArgs(GetDataEventArgs args, MemoryStream data) {
+        public ProjectileNewArgs(GetDataEventArgs args, MemoryStream data, TSPlayer player) : base(player) {
             Args = args;
 
             Identity = data.ReadInt16();

@@ -1,5 +1,4 @@
 ﻿using BatteriesNotIncluded.Framework;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using TShockAPI;
 
-namespace BatteriesNotIncluded.Minigames.CTF {
-    public class CTFCommand : ICommand {
+namespace BatteriesNotIncluded.Minigames.Splatoon {
+    public class SplatoonCommand : ICommand {
         private static string InvalidSyntax = "Invalid Syntax. ";
-        private static string Syntax = "/ctf <start/join>";
+        private static string Syntax = "/splatoon <start/join>";
 
         public IEnumerable<Command> GetCommands() {
-            yield return new Command("bni.ctf", CTF, "ctf");
+            yield return new Command("bni.splatoon", Splatoon, "splatoon");
         }
 
-        public static void CTF(CommandArgs args) {
+        public static void Splatoon(CommandArgs args) {
             var player = args.Player;
             var input = args.Parameters;
 
@@ -27,16 +26,15 @@ namespace BatteriesNotIncluded.Minigames.CTF {
 
             switch (input[0].ToLower()) {
                 case "join":
-                    if (Main.ActiveVote != null && Main.ActiveVote.GetType() == typeof(CTF)) {
+                    if (Main.ActiveVote != null && Main.ActiveVote.GetType() == typeof(Splatoon)) {
                         if (!Main.ActiveVote.Players.Contains(player)) {
-                            player.SendSuccessMessage("You've been added to CTF!");
+                            player.SendSuccessMessage("You've been added to Splatoon!");
                             Main.ActiveVote.AddPlayer(player);
                         } else {
-                            player.SendErrorMessage("You're already in CTF!");
+                            player.SendErrorMessage("You're already in Splatoon!");
                         }
-                        
                     } else {
-                        player.SendErrorMessage("No active CTF vote.");
+                        player.SendErrorMessage("No active Splatoon vote.");
                     }
                     break;
 
@@ -49,20 +47,20 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                     IEnumerable<Arena> arenas;
                     if (input.Count >= 2) {
                         string arenaName = input[1];
-                        arenas = Main.ArenaManager.GetAvailableArenas<CTFArena>(arenaName);
+                        arenas = Main.ArenaManager.GetAvailableArenas<SplatoonArena>(arenaName);
                         if (arenas.Count() == 0) {
-                            args.Player.SendErrorMessage("CTF arena not found.");
+                            args.Player.SendErrorMessage("Splatoon arena not found.");
                             return;
                         }
                     } else {
-                        arenas = Main.ArenaManager.GetAvailableArenas<CTFArena>();
+                        arenas = Main.ArenaManager.GetAvailableArenas<SplatoonArena>();
                         if (arenas.Count() == 0) {
-                            args.Player.SendErrorMessage("All CTF arenas are occupied.");
+                            args.Player.SendErrorMessage("All Splatoon arenas are occupied.");
                             return;
                         }
                     }
 
-                    Main.ActiveVote = new CTF(arenas.SelectRandom());
+                    Main.ActiveVote = new Splatoon(arenas.SelectRandom());
                     Main.ActiveVote.AddPlayer(player);
                     break;
 

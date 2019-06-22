@@ -14,7 +14,7 @@ namespace BatteriesNotIncluded.Framework.Network {
         public static void HandleData(GetDataEventArgs args, MemoryStream data, TSPlayer player) {
             switch (args.MsgID) {
                 case PacketTypes.PlayerHurtV2:
-                    OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerHurtArgs(args, data)); 
+                    OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerHurtArgs(args, data, player)); 
                     return;
 
                 case PacketTypes.TogglePvp:
@@ -26,15 +26,15 @@ namespace BatteriesNotIncluded.Framework.Network {
                     return;
 
                 case PacketTypes.PlayerDeathV2:
-                    OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerDeathArgs(player));
+                    OnPlayerGetData?.Invoke(typeof(DataHandler), new PlayerDeathArgs(args, data, player));
                     return;
 
                 case PacketTypes.ProjectileNew:
-                    OnPlayerGetData?.Invoke(typeof(DataHandler), new ProjectileNewArgs(args, data));
+                    OnPlayerGetData?.Invoke(typeof(DataHandler), new ProjectileNewArgs(args, data, player));
                     return;
 
                 case PacketTypes.ProjectileDestroy:
-                    OnPlayerGetData?.Invoke(typeof(DataHandler), new ProjectileDestroyArgs(data));
+                    OnPlayerGetData?.Invoke(typeof(DataHandler), new ProjectileDestroyArgs(data, player));
                     return;
 
                 case PacketTypes.PlayerUpdate:

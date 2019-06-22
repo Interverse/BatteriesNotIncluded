@@ -7,8 +7,7 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
     public class TogglePvPArgs : TerrariaPacket {
         public bool Hostile;
 
-        public TogglePvPArgs(MemoryStream data, TSPlayer player) {
-            Player = player;
+        public TogglePvPArgs(MemoryStream data, TSPlayer player) : base(player) {
             Hostile = data.ReadBoolean();
         }
     }

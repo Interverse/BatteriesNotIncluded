@@ -8,5 +8,9 @@ using TShockAPI;
 namespace BatteriesNotIncluded.Framework.Network.Packets {
     public class TerrariaPacket : EventArgs {
         public TSPlayer Player;
+
+        public TerrariaPacket(TSPlayer player) {
+            Player = player;
+        }
     }
 }

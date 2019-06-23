@@ -26,6 +26,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         private int _redScore = 0;
         private int _blueScore = 0;
 
+        private int _scoreboardTick = 0;
         private string _scoreText => $"(Red: {_redScore}, Blue: {_blueScore})";
 
         private TSPlayer _redFlagHolder;
@@ -122,6 +123,29 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                     BlueTeam.Remove(BlueTeam[index]);
                     index--;
                 }
+            }
+
+            _scoreboardTick++;
+            if (_scoreboardTick / 60 == 1) {
+                string teamWinning = _redScore > _blueScore ? "Red Team is winning!" : "Blue Team is winning!";
+                if (_redScore == _blueScore) teamWinning = "Red and Blue are equal!";
+                string bodyMessage = $"{teamWinning}\n" +
+                    $"Red Players: {RedTeam.Count}\n" +
+                    $"Blue Players: {BlueTeam.Count}\n" +
+                    $"Score: {_scoreText}";
+
+                if (_redFlagHolder != null) {
+                    bodyMessage += $"\n{_redFlagHolder.Name} has the red flag.";
+                }
+
+                if (_blueFlagHolder != null) {
+                    bodyMessage += $"\n{_blueFlagHolder.Name} has the blue flag.";
+                }
+
+                foreach (var player in Players) {
+                    player.DisplayInterface("Capture The Flag Score", bodyMessage);
+                }
+                _scoreboardTick = 0;
             }
         }
 

@@ -49,7 +49,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                         string arenaName = input[1];
                         arenas = Main.ArenaManager.GetAvailableArenas<SplatoonArena>(arenaName);
                         if (arenas.Count() == 0) {
-                            args.Player.SendErrorMessage("Splatoon arena not found.");
+                            args.Player.SendErrorMessage("Splatoon arena not found or not available.");
                             return;
                         }
                     } else {

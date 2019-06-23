@@ -13,12 +13,14 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
         public float ProjectileY;
 
         public ProjectileDestroyArgs(MemoryStream data, TSPlayer player) : base(player) {
-            ProjectileIndex = data.ReadInt16();
-            Owner = data.ReadByte();
+            lock (Terraria.Main.projectile) {
+                ProjectileIndex = data.ReadInt16();
+                Owner = data.ReadByte();
 
-            ProjectileDestroyed = Terraria.Main.projectile[ProjectileIndex];
-            ProjectileX = ProjectileDestroyed.Center.X;
-            ProjectileY = ProjectileDestroyed.Center.Y;
+                ProjectileDestroyed = Terraria.Main.projectile[ProjectileIndex];
+                ProjectileX = ProjectileDestroyed.Center.X;
+                ProjectileY = ProjectileDestroyed.Center.Y;
+            }
         }
     }
 }

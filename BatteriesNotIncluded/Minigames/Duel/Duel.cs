@@ -27,6 +27,8 @@ namespace BatteriesNotIncluded.Minigames.Duel {
         private DateTime _respawnTimer;
         private int _respawnDelay = 1000;
 
+        private int _scoreboardTick = 0;
+
         public override string GamemodeName => "Duel";
 
         public Duel(TSPlayer challenger, TSPlayer opponent, DuelArena arena) : base(arena) {
@@ -91,6 +93,18 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                 } else {
                     SendMessageToAllPlayers("Go!");
                 }
+
+                string personWinning = _challengerScore > _opponentScore ? challenger.Name + " is winning!" : opponent.Name + " is winning!";
+                if (_challengerScore == _opponentScore) personWinning = "Both people are equal in score!";
+                string bodyMessage = $"{personWinning}\n" +
+                    $"Challenger: {challenger.Name}\n" +
+                    $"Opponent: {opponent.Name}\n" +
+                    $"Score: {_scoreText}";
+
+                foreach (var player in Players) {
+                    player.DisplayInterface("Duel Score", bodyMessage);
+                }
+                _scoreboardTick = 0;
             }
 
             return _respawnCounter > 0;
@@ -113,6 +127,21 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                     _respawnTimer = DateTime.Now;
                     _respawnCounter = 6;
                 }
+            }
+
+            _scoreboardTick++;
+            if (_scoreboardTick / 60 == 1) {
+                string personWinning = _challengerScore > _opponentScore ? challenger.Name + " is winning!" : opponent.Name + " is winning!";
+                if (_challengerScore == _opponentScore) personWinning = "Both people are equal in score!";
+                string bodyMessage = $"{personWinning}\n" +
+                    $"Challenger: {challenger.Name}\n" +
+                    $"Opponent: {opponent.Name}\n" +
+                    $"Score: {_scoreText}";
+
+                foreach (var player in Players) {
+                    player.DisplayInterface("Duel Score", bodyMessage);
+                }
+                _scoreboardTick = 0;
             }
         }
         public override bool InsufficientPlayers() {

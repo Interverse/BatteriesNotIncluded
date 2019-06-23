@@ -51,7 +51,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                         string arenaName = input[1];
                         arenas = Main.ArenaManager.GetAvailableArenas<CTFArena>(arenaName);
                         if (arenas.Count() == 0) {
-                            args.Player.SendErrorMessage("CTF arena not found.");
+                            args.Player.SendErrorMessage("CTF arena not found or not available.");
                             return;
                         }
                     } else {

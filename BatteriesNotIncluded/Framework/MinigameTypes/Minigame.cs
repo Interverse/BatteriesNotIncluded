@@ -179,7 +179,7 @@ namespace BatteriesNotIncluded.Framework.MinigameTypes {
             OnPlayerData(e);
 
             var spawn = e as PlayerSpawnArgs;
-            if (spawn != null) {
+            if (spawn != null && _state == GameState.GameRunning) {
                 spawn.Player.SpawnOnSpawnPoint();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using BatteriesNotIncluded.Framework;
 using BatteriesNotIncluded.Framework.Extensions;
+using BatteriesNotIncluded.Framework.MinigameTypes;
 using BatteriesNotIncluded.Framework.Network.Packets;
 using Microsoft.Xna.Framework;
 using System;
@@ -12,21 +13,11 @@ using TerrariaApi.Server;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Minigames.Splatoon {
-    public class Splatoon : Minigame {
+    public class Splatoon : EndgameMinigame {
         public override string GamemodeName => "Splatoon";
 
         private List<TSPlayer> RedTeam = new List<TSPlayer>();
         private List<TSPlayer> BlueTeam = new List<TSPlayer>();
-
-        // Variables for timers for announcing Splatoon
-        private int _alertCounter = 0;
-        private DateTime _lastAlert;
-        private int _alertDelay = 10000;
-
-        // Variables for countdown delay
-        private int _respawnCounter = 4;
-        private DateTime _respawnTimer;
-        private int _respawnDelay = 1000;
 
         private DateTime _gameStart;
         private DateTime _lastGameTimeAnnounce;
@@ -43,61 +34,13 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
 
         private int _scoreboardTick = 0;
 
+        private int _tilesPerUpdate = 100;
+        private int _tilesUpdated = 0;
+
         private string _score => $"(Red: {(_redScore / _totalPaintSpots * 100).ToString("0.##")}%, Blue: {(_blueScore / _totalPaintSpots * 100).ToString("0.##")}%)";
 
         public Splatoon(Arena arena) : base(arena) {
-            _lastAlert = DateTime.Now;
             ServerApi.Hooks.ProjectileAIUpdate.Register(Main.Instance, OnProjectileUpdate);
-        }
-
-        public override void Initialize() {
-            TShock.Utils.Broadcast($"Splatoon vote has started. Type '/splatoon join' to join. (Arena: {ActiveArena.Name}) ({(3 - _alertCounter) * 10}s left)", Color.Cyan);
-            Players[0].SendSuccessMessage("You've been added to Splatoon.");
-        }
-
-        public override bool PreGame() {
-            if ((DateTime.Now - _lastAlert).TotalMilliseconds >= _alertDelay) {
-                _lastAlert = DateTime.Now;
-                _alertCounter += 1;
-
-                if (_alertCounter < 3) {
-                    TShock.Utils.Broadcast($"Splatoon vote currently running. Type '/splatoon join' to join. (Arena: {ActiveArena.Name}) ({(3 - _alertCounter) * 10}s left)", Color.Cyan);
-                } else {
-                    TShock.Utils.Broadcast($"Current Splatoon vote has ended.", Color.Cyan);
-                }
-            }
-
-            return _alertCounter < 3;
-        }
-
-        public override bool HasVoteSucceeded() {
-            return Players.Count > 1;
-        }
-
-        public override void FailStart() {
-            SendMessageToAllPlayers("Splatoon vote failed. Not enough players.");
-        }
-
-        public override bool Countdown() {
-            if ((DateTime.Now - _respawnTimer).TotalMilliseconds >= _respawnDelay) {
-                foreach (var player in Players) {
-                    player.SpawnOnSpawnPoint();
-                    player.Heal();
-                }
-
-                _respawnTimer = DateTime.Now;
-                _respawnCounter -= 1;
-
-                if (_respawnCounter > 0) {
-                    SendMessageToAllPlayers($"Splatoon beginning in {_respawnCounter}...");
-                } else {
-                    SendMessageToAllPlayers("Go!");
-                }
-
-                SetPvP(true);
-            }
-
-            return _respawnCounter > 0;
         }
 
         public override void StartGame() {
@@ -127,7 +70,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 _matchTimeCounter--;
 
                 if (_matchTimeCounter > 0) {
-                    SendMessageToAllPlayers($"(Splatoon) {_matchTimeCounter} minutes remain!");
+                    SendMessageToAllPlayers($"(Splatoon) {_matchTimeCounter} minutes remain! {_score}");
                 }
             }
 
@@ -145,6 +88,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 }
             }
 
+            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 DateTime timeRemaining = _gameDuration - (DateTime.Now - _gameStart);
@@ -158,6 +102,9 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 }
                 _scoreboardTick = 0;
             }
+            */
+
+            _tilesUpdated = 0;
         }
 
         public override void OnPlayerData(TerrariaPacket e) {
@@ -176,10 +123,12 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
             ProjectileDestroyArgs projectileDied = e as ProjectileDestroyArgs;
 
             if (projectileDied != null) {
-                if (RedTeam.Contains(e.Player)) {
-                    PaintCircle((int)projectileDied.ProjectileX, (int)projectileDied.ProjectileY, 3 + projectileDied.ProjectileDestroyed.damage / 150, _deepRedPaintID);
-                } else if (BlueTeam.Contains(e.Player)) {
-                    PaintCircle((int)projectileDied.ProjectileX, (int)projectileDied.ProjectileY, 3 + projectileDied.ProjectileDestroyed.damage / 150, _deepBluePaintID);
+                if (projectileDied.ProjectileDestroyed.owner == projectileDied.Owner) {
+                    if (RedTeam.Contains(e.Player)) {
+                        PaintCircle((int)projectileDied.ProjectileX, (int)projectileDied.ProjectileY, 3 + projectileDied.ProjectileDestroyed.damage / 150, _deepRedPaintID);
+                    } else if (BlueTeam.Contains(e.Player)) {
+                        PaintCircle((int)projectileDied.ProjectileX, (int)projectileDied.ProjectileY, 3 + projectileDied.ProjectileDestroyed.damage / 150, _deepBluePaintID);
+                    }
                 }
             }
         }
@@ -235,10 +184,6 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
             TShock.Utils.Broadcast(winText, Color.Cyan);
         }
 
-        public override void OnFailedFinished() {
-            SendMessageToAllPlayers("Insufficient players to continue Splatoon.");
-        }
-
         public override void OnCleanup() {
             ServerApi.Hooks.ProjectileAIUpdate.Deregister(Main.Instance, OnProjectileUpdate);
             ResetArena();
@@ -247,6 +192,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
         private void PaintTile(int x, int y, int color) {
             var arena = ActiveArena as SplatoonArena;
             if (x < arena.ArenaTopLeft.X || x > arena.ArenaBottomRight.X || y < arena.ArenaTopLeft.Y || y > arena.ArenaBottomRight.Y) return;
+            if (_tilesUpdated > _tilesPerUpdate) return;
 
             var tile = Terraria.Main.tile[x / 16, y / 16];
 
@@ -273,6 +219,8 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 tile.wallColor((byte)color);
                 NetMessage.SendData((int)PacketTypes.PaintWall, -1, -1, null, x / 16, y / 16, color);
             }
+
+            _tilesUpdated++;
         }
 
         private void PaintCircle(int x, int y, int radius, int color) {
@@ -322,13 +270,26 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
 
                     if (Terraria.Main.tile[x, y].color() != tileColor) {
                         Terraria.Main.tile[x, y].color((byte)tileColor);
-                        NetMessage.SendData((int)PacketTypes.PaintTile, -1, -1, null, x, y, tileColor);
                     }
 
                     if (Terraria.Main.tile[x, y].wallColor() != wallColor) {
                         Terraria.Main.tile[x, y].wallColor((byte)wallColor);
-                        NetMessage.SendData((int)PacketTypes.PaintWall, -1, -1, null, x, y, wallColor);
                     }
+                }
+            }
+
+            ResetSection((int)arena.ArenaTopLeft.X / 16, (int)arena.ArenaBottomRight.X / 16, (int)arena.ArenaTopLeft.Y / 16, (int)arena.ArenaBottomRight.Y / 16);
+        }
+
+        public void ResetSection(int x, int x2, int y, int y2) {
+            int lowX = Netplay.GetSectionX(x);
+            int highX = Netplay.GetSectionX(x2);
+            int lowY = Netplay.GetSectionY(y);
+            int highY = Netplay.GetSectionY(y2);
+            foreach (RemoteClient sock in Netplay.Clients.Where(s => s.IsActive)) {
+                for (int i = lowX; i <= highX; i++) {
+                    for (int j = lowY; j <= highY; j++)
+                        sock.TileSections[i, j] = false;
                 }
             }
         }

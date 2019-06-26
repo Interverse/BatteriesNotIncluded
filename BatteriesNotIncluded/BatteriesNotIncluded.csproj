@@ -65,14 +65,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Commands\Join.cs" />
     <Compile Include="Framework\Commands\Quit.cs" />
+    <Compile Include="Framework\Commands\Start.cs" />
     <Compile Include="Framework\Managers\ArenaManager.cs" />
     <Compile Include="Framework\Managers\CommandManager.cs" />
     <Compile Include="Framework\Arena.cs" />
     <Compile Include="Framework\Database.cs" />
     <Compile Include="Framework\Extensions\TSPlayerExtension.cs" />
-    <Compile Include="Framework\ICommand.cs" />
-    <Compile Include="Framework\Minigame.cs" />
+    <Compile Include="Framework\Commands\ICommand.cs" />
+    <Compile Include="Framework\MinigameTypes\EndgameMinigame.cs" />
+    <Compile Include="Framework\MinigameTypes\Minigame.cs" />
     <Compile Include="Framework\MiscUtils.cs" />
     <Compile Include="Framework\Network\DataHandler.cs" />
     <Compile Include="Framework\Network\Packets\ItemOwnerArgs.cs" />
@@ -92,14 +95,12 @@
     <Compile Include="Main.cs" />
     <Compile Include="Minigames\CTF\CTF.cs" />
     <Compile Include="Minigames\CTF\CTFArena.cs" />
-    <Compile Include="Minigames\CTF\CTFCommand.cs" />
     <Compile Include="Minigames\Duel\Duel.cs" />
     <Compile Include="Minigames\Duel\DuelArena.cs" />
     <Compile Include="Minigames\Duel\DuelCommand.cs" />
     <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
     <Compile Include="Minigames\Splatoon\Splatoon.cs" />
     <Compile Include="Minigames\Splatoon\SplatoonArena.cs" />
-    <Compile Include="Minigames\Splatoon\SplatoonCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

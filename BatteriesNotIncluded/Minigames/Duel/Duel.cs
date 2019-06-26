@@ -1,5 +1,6 @@
 ﻿using BatteriesNotIncluded.Framework;
 using BatteriesNotIncluded.Framework.Extensions;
+using BatteriesNotIncluded.Framework.MinigameTypes;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -128,7 +129,8 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                     _respawnCounter = 6;
                 }
             }
-
+            
+            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 string personWinning = _challengerScore > _opponentScore ? challenger.Name + " is winning!" : opponent.Name + " is winning!";
@@ -143,6 +145,7 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                 }
                 _scoreboardTick = 0;
             }
+            */
         }
         public override bool InsufficientPlayers() {
             return Players.Count < 2;

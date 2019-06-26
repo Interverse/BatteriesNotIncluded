@@ -23,11 +23,11 @@ namespace BatteriesNotIncluded.Framework.Managers {
             }
         }
 
-        public IEnumerable<Arena> GetAvailableArenas<T>(string name = default) {
+        public IEnumerable<Arena> GetAvailableArenas(string type, string name = default) {
             if (name != default) {
-                return Arenas.FindAll(c => c.GetType() == typeof(T) && c.Available && c.Name == name);
+                return Arenas.FindAll(c => c.Type.ToLower() == type.ToLower() && c.Available && c.Name == name);
             }
-            return Arenas.FindAll(c => c.GetType() == typeof(T) && c.Available);
+            return Arenas.FindAll(c => c.Type.ToLower() == type.ToLower() && c.Available);
         }
 
         public Arena GetArena(string name) {

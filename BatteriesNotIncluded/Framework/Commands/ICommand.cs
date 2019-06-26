@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TShockAPI;
 
-namespace BatteriesNotIncluded.Framework {
+namespace BatteriesNotIncluded.Framework.Commands {
     interface ICommand {
         IEnumerable<Command> GetCommands();
     }

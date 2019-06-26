@@ -23,7 +23,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
             Type arenaType = GetType();
 
             List<SqlColumn> sqlColumns = new List<SqlColumn>();
-            sqlColumns.Add(new SqlColumn("Name", MySqlDbType.Text) { Primary = true, Length = 255 });
+            sqlColumns.Add(new SqlColumn("Name", MySqlDbType.Text) { Length = 255 });
 
             IEnumerable<string> vectors = this.GetVariableNamesOfType<Vector2>();
 

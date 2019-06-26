@@ -17,6 +17,7 @@ namespace BatteriesNotIncluded.Framework {
         private readonly string _name;
 
         public IDbConnection db;
+        private SqlTableCreator _sqlCreator;
 
         public Database(string name) {
             _name = name;
@@ -26,9 +27,10 @@ namespace BatteriesNotIncluded.Framework {
         /// Connects the mysql/sqlite database for the plugin, creating one if the database doesn't already exist.
         /// </summary>
         public Database ConnectDB() {
-            if (TShock.Config.StorageType.ToLower() == "sqlite")
+            //if (TShock.Config.StorageType.ToLower() == "sqlite")
                 db = new SqliteConnection(string.Format("uri=file://{0},Version=3",
                     Path.Combine(TShock.SavePath, $"{_name}.sqlite")));
+            /*
             else if (TShock.Config.StorageType.ToLower() == "mysql") {
                 try {
                     var host = TShock.Config.MySqlHost.Split(':');
@@ -46,17 +48,18 @@ namespace BatteriesNotIncluded.Framework {
                 }
             } else
                 throw new Exception("Invalid storage type.");
+            */
+
+            _sqlCreator = new SqlTableCreator(db,
+                IsMySql
+                    ? (IQueryBuilder)new MysqlQueryCreator()
+                    : (IQueryBuilder)new SqliteQueryCreator());
 
             return this;
         }
 
         public Database CreateTable(SqlTable table) {
-            var sqlCreator = new SqlTableCreator(db,
-                IsMySql
-                    ? (IQueryBuilder)new MysqlQueryCreator()
-                    : (IQueryBuilder)new SqliteQueryCreator());
-
-            sqlCreator.EnsureTableStructure(table);
+            _sqlCreator.EnsureTableStructure(table);
             return this;
         }
 

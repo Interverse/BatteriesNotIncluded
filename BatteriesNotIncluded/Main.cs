@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BatteriesNotIncluded.Framework;
 using BatteriesNotIncluded.Framework.Managers;
+using BatteriesNotIncluded.Framework.MinigameTypes;
 using BatteriesNotIncluded.Framework.Network;
 using TerrariaApi.Server;
 using TShockAPI;

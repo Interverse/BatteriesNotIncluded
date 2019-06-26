@@ -1,10 +1,8 @@
 ﻿using BatteriesNotIncluded.Framework;
+using BatteriesNotIncluded.Framework.Commands;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Minigames.Duel {
@@ -56,13 +54,13 @@ namespace BatteriesNotIncluded.Minigames.Duel {
             IEnumerable<Arena> arenas;
             if (input.Count >= 2) {
                 string arenaName = input[1];
-                arenas = Main.ArenaManager.GetAvailableArenas<DuelArena>(arenaName);
+                arenas = Main.ArenaManager.GetAvailableArenas("Duel", arenaName);
                 if (arenas.Count() == 0) {
                     args.Player.SendErrorMessage("Duel arena not found.");
                     return;
                 }
             } else {
-                arenas = Main.ArenaManager.GetAvailableArenas<DuelArena>();
+                arenas = Main.ArenaManager.GetAvailableArenas("Duel");
                 if (arenas.Count() == 0) {
                     args.Player.SendErrorMessage("All duel arenas are occupied.");
                     return;

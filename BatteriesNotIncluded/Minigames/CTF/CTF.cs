@@ -1,5 +1,6 @@
 ﻿using BatteriesNotIncluded.Framework;
 using BatteriesNotIncluded.Framework.Extensions;
+using BatteriesNotIncluded.Framework.MinigameTypes;
 using BatteriesNotIncluded.Framework.Network.Packets;
 using Microsoft.Xna.Framework;
 using System;
@@ -7,21 +8,11 @@ using System.Collections.Generic;
 using TShockAPI;
 
 namespace BatteriesNotIncluded.Minigames.CTF {
-    public class CTF : Minigame {
+    public class CTF : EndgameMinigame {
         public override string GamemodeName => "CTF";
 
         private List<TSPlayer> RedTeam = new List<TSPlayer>();
         private List<TSPlayer> BlueTeam = new List<TSPlayer>();
-
-        // Variables for timers for announcing CTF
-        private int _alertCounter = 0;
-        private DateTime _lastAlert;
-        private int _alertDelay = 10000;
-
-        // Variables for countdown delay
-        private int _respawnCounter = 4;
-        private DateTime _respawnTimer;
-        private int _respawnDelay = 1000;
 
         private int _redScore = 0;
         private int _blueScore = 0;
@@ -32,37 +23,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         private TSPlayer _redFlagHolder;
         private TSPlayer _blueFlagHolder;
 
-        public CTF(Arena arena) : base(arena) {
-            _lastAlert = DateTime.Now;
-        }
-
-        public override void Initialize() {
-            TShock.Utils.Broadcast($"CTF vote has started. Type '/ctf join' to join. (Arena: {ActiveArena.Name}) ({(3 - _alertCounter) * 10}s left)", Color.Cyan);
-            Players[0].SendSuccessMessage("You've been added to CTF.");
-        }
-
-        public override bool PreGame() {
-            if ((DateTime.Now - _lastAlert).TotalMilliseconds >= _alertDelay) {
-                _lastAlert = DateTime.Now;
-                _alertCounter += 1;
-
-                if (_alertCounter < 3) {
-                    TShock.Utils.Broadcast($"CTF vote currently running. Type '/ctf join' to join. (Arena: {ActiveArena.Name}) ({(3 - _alertCounter) * 10}s left)", Color.Cyan);
-                } else {
-                    TShock.Utils.Broadcast($"Current CTF vote has ended.", Color.Cyan);
-                }
-            }
-
-            return _alertCounter < 3;
-        }
-
-        public override bool HasVoteSucceeded() {
-            return Players.Count > 1;
-        }
-
-        public override void FailStart() {
-            SendMessageToAllPlayers("CTF vote failed. Not enough players.");
-        }
+        public CTF(Arena arena) : base(arena) { }
 
         public override void StartGame() {
             CTFArena arena = ActiveArena as CTFArena;
@@ -78,28 +39,6 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                     player.SetTeam(3);
                 }
             }
-        }
-
-        public override bool Countdown() {
-            if ((DateTime.Now - _respawnTimer).TotalMilliseconds >= _respawnDelay) {
-                foreach (var player in Players) {
-                    player.SpawnOnSpawnPoint();
-                    player.Heal();
-                }
-
-                _respawnTimer = DateTime.Now;
-                _respawnCounter -= 1;
-
-                if (_respawnCounter > 0) {
-                    SendMessageToAllPlayers($"CTF beginning in {_respawnCounter}...");
-                } else {
-                    SendMessageToAllPlayers("Go!");
-                }
-
-                SetPvP(true);
-            }
-
-            return _respawnCounter > 0;
         }
 
         public override void OnRunning() {
@@ -125,6 +64,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 }
             }
 
+            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 string teamWinning = _redScore > _blueScore ? "Red Team is winning!" : "Blue Team is winning!";
@@ -147,6 +87,7 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 }
                 _scoreboardTick = 0;
             }
+            */
         }
 
         public override void OnPlayerData(TerrariaPacket e) {
@@ -231,10 +172,6 @@ namespace BatteriesNotIncluded.Minigames.CTF {
             winText += $"{_scoreText} Congrats to " + string.Join(", ", winners) + "!";
 
             TShock.Utils.Broadcast(winText, _redScore == 3 ? Color.OrangeRed : Color.Turquoise);
-        }
-
-        public override void OnFailedFinished() {
-            SendMessageToAllPlayers("Insufficient players to continue CTF.");
         }
     }
 }

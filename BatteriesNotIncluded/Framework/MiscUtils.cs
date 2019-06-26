@@ -163,6 +163,16 @@ namespace BatteriesNotIncluded.Framework {
         }
 
         /// <summary>
+        /// Gets every Type that inherits an abstract of a class. Any abstract classes that inherits the abstract
+        /// class is not included in the list.
+        /// </summary>
+        /// <returns>A list of all the instantiated objects</returns>
+        public static List<Type> GetTypesThatInheritAbstract<T>() {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract).ToList();
+        }
+
+        /// <summary>
         /// Selects a random element in a <see cref="IEnumerable{T}"/>
         /// </summary>
         public static T SelectRandom<T>(this IEnumerable<T> obj) => obj.ElementAt(Random.Next(obj.Count()));
@@ -213,5 +223,11 @@ namespace BatteriesNotIncluded.Framework {
             var test = obj.GetType().GetField(propertyName);
             return (T)test.GetValue(obj);
         }
+
+        /// <summary>
+        /// Strips namespace until string is just the name of the Type.
+        /// Example: "BatteriesNotIncluded.Framework.Arena" would just become "Arena"
+        /// </summary>
+        public static string StripNamespace(this Type type) => type.ToString().Split('.').Last();
     }
 }

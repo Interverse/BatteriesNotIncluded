@@ -9,7 +9,7 @@ using Terraria;
 using TerrariaApi.Server;
 using TShockAPI;
 
-namespace BatteriesNotIncluded.Framework {
+namespace BatteriesNotIncluded.Framework.MinigameTypes {
     public abstract class Minigame {
         public List<TSPlayer> Players = new List<TSPlayer>();
         public Arena ActiveArena;
@@ -86,7 +86,7 @@ namespace BatteriesNotIncluded.Framework {
                     } else {
                         OnFinished();
                     }
-                    SetPvP(false);
+                    //SetPvP(false);
                     _state = GameState.Cleanup;
                     break;
 
@@ -226,6 +226,12 @@ namespace BatteriesNotIncluded.Framework {
 
         internal GameState GetGameState() {
             return _state;
+        }
+
+        public void SendPacketsToAllPlayers(byte[] packet) {
+            foreach (var player in Players) {
+                player.SendRawData(packet);
+            }
         }
     }
 

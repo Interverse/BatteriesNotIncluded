@@ -23,6 +23,8 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         private TSPlayer _redFlagHolder;
         private TSPlayer _blueFlagHolder;
 
+        private int _winAmount = 750;
+
         public CTF(Arena arena) : base(arena) { }
 
         public override void StartGame() {
@@ -64,7 +66,6 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 }
             }
 
-            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 string teamWinning = _redScore > _blueScore ? "Red Team is winning!" : "Blue Team is winning!";
@@ -87,7 +88,6 @@ namespace BatteriesNotIncluded.Minigames.CTF {
                 }
                 _scoreboardTick = 0;
             }
-            */
         }
 
         public override void OnPlayerData(TerrariaPacket e) {

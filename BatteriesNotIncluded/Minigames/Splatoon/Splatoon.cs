@@ -37,6 +37,8 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
         private int _tilesPerUpdate = 100;
         private int _tilesUpdated = 0;
 
+        private int _winAmount = 750;
+
         private string _score => $"(Red: {(_redScore / _totalPaintSpots * 100).ToString("0.##")}%, Blue: {(_blueScore / _totalPaintSpots * 100).ToString("0.##")}%)";
 
         public Splatoon(Arena arena) : base(arena) {
@@ -88,7 +90,6 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 }
             }
 
-            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 DateTime timeRemaining = _gameDuration - (DateTime.Now - _gameStart);
@@ -102,7 +103,6 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 }
                 _scoreboardTick = 0;
             }
-            */
 
             _tilesUpdated = 0;
         }
@@ -165,11 +165,15 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 winText += "Red team wins! ";
                 foreach (var winner in RedTeam) {
                     winners.Add(winner.Name);
+
+                    winner.SendInfoMessage($"You gained {_winAmount} RP for winning.");
                 }
             } else if (_blueScore > _redScore) {
                 winText += "Blue team wins!";
                 foreach (var winner in BlueTeam) {
                     winners.Add(winner.Name);
+
+                    winner.SendInfoMessage($"You gained {_winAmount} RP for winning.");
                 }
             } else {
                 winText += "It was a tie!";

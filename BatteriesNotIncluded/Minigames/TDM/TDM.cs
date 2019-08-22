@@ -42,6 +42,20 @@ namespace BatteriesNotIncluded.Minigames.TDM {
         }
 
         public override void OnRunning() {
+            for (int index = 0; index < RedTeam.Count; index++) {
+                if (!Players.Contains(RedTeam[index])) {
+                    RedTeam.Remove(RedTeam[index]);
+                    index--;
+                }
+            }
+
+            for (int index = 0; index < BlueTeam.Count; index++) {
+                if (!Players.Contains(BlueTeam[index])) {
+                    BlueTeam.Remove(BlueTeam[index]);
+                    index--;
+                }
+            }
+
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 string teamWinning = _redScore > _blueScore ? "Red Team is winning!" : "Blue Team is winning!";

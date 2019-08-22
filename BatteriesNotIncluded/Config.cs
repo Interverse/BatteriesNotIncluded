@@ -11,6 +11,7 @@ namespace BatteriesNotIncluded {
     public class Config {
         public static string ConfigPath = Path.Combine(TShock.SavePath, "batteriesnotincluded.json");
 
+        public bool AutoJoinVotes = true;
         public bool EnableScorebar = true;
         public int CTFMaxScore = 3;
         public int TDMMaxScore = 10;

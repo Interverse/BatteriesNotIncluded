@@ -25,6 +25,7 @@ namespace BatteriesNotIncluded.Framework.Commands {
             player.SetGamemode(default);
 
             player.SpawnOnOldPosition();
+            player.ClearInterface();
         }
     }
 }

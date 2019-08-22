@@ -25,7 +25,6 @@ namespace BatteriesNotIncluded.Framework.MinigameTypes {
 
         public override void Initialize() {
             TShock.Utils.Broadcast($"{GamemodeName} vote has started. Type '/join' to join. (Arena: {ActiveArena.Name}) ({(3 - _alertCounter) * 10}s left)", Color.Cyan);
-            Players[0].SendSuccessMessage($"You've been added to {GamemodeName}.");        
         }
 
         public override bool PreGame() {

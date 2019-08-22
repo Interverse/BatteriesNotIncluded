@@ -55,7 +55,11 @@ namespace BatteriesNotIncluded.Framework.Commands {
             }
 
             Main.ActiveVote = (Minigame)Activator.CreateInstance(gamemodeType, arenas.SelectRandom());
-            Main.ActiveVote.AddPlayer(player);
+
+            if (Main.Config.AutoJoinVotes) {
+                Main.ActiveVote.AddPlayer(player);
+                player.SendSuccessMessage($"You've been added to {gamemodeName}.");
+            }
         }
     }
 }

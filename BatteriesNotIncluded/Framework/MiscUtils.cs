@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Terraria;
 
 namespace BatteriesNotIncluded.Framework {
     public static class MiscUtils {
+        public static Random Random = new Random();
+
         /// <summary>
         /// Attempts to sanitize any ' characters in a string to '' for sql queries.
         /// </summary>
@@ -138,5 +141,93 @@ namespace BatteriesNotIncluded.Framework {
                 return false;
             }
         }
+
+        /// <summary>
+        /// Instantiates every class in the assembly that inherits an interface.
+        /// </summary>
+        /// <returns>A list of all the instantiated objects</returns>
+        public static List<T> InstantiateClassesOfInterface<T>() {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.GetInterfaces().Contains(typeof(T)))
+                .Select(t => (T)Activator.CreateInstance(t)).ToList();
+        }
+
+        /// <summary>
+        /// Instantiates every class in the assembly that inherits an abstract class.
+        /// </summary>
+        /// <returns>A list of all the instantiated objects</returns>
+        public static List<T> InstantiateClassesOfAbstract<T>() {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract)
+                .Select(t => (T)Activator.CreateInstance(t)).ToList();
+        }
+
+        /// <summary>
+        /// Gets every Type that inherits an abstract of a class. Any abstract classes that inherits the abstract
+        /// class is not included in the list.
+        /// </summary>
+        /// <returns>A list of all the instantiated objects</returns>
+        public static List<Type> GetTypesThatInheritAbstract<T>() {
+            return Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(T).IsAssignableFrom(t) && !t.IsAbstract).ToList();
+        }
+
+        /// <summary>
+        /// Selects a random element in a <see cref="IEnumerable{T}"/>
+        /// </summary>
+        public static T SelectRandom<T>(this IEnumerable<T> obj) => obj.ElementAt(Random.Next(obj.Count()));
+
+        /// <summary>
+        /// Capitalizes the first letter of the entire string.
+        /// </summary>
+        public static string FirstCharToUpper(this string input) {
+            if (String.IsNullOrEmpty(input)) return "";
+            if (input.Length == 1) return input.ToUpper();
+            return input.First().ToString().ToUpper() + input.Substring(1);
+        }
+
+        /// <summary>
+        /// Gets every variable name that matches a type.
+        /// </summary>
+        /// <typeparam name="T">Type to search for.</typeparam>
+        /// <returns>An <see cref="IEnumerable{string}"/> of all variables that matches the type.</returns>
+        public static IEnumerable<string> GetVariableNamesOfType<T>(this object obj) {
+            var values = obj.GetType().GetFields();
+
+            foreach (var value in values) {
+                if (value.FieldType == typeof(T)) {
+                    yield return value.Name;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets a value in an object given the field name and a value.
+        /// </summary>
+        /// <returns>Bool whether the field exists in the object.</returns>
+        public static bool SetValue<T>(this object obj, string fieldName, T val) {
+            try {
+                var test = obj.GetType().GetField(fieldName);
+                test.SetValue(obj, val);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Takes in a name of a variable in a class, finds the variable in an object, and
+        /// tries to set a string value to the variable for the object.
+        /// </summary>
+        public static T GetValue<T>(this object obj, string propertyName) {
+            var test = obj.GetType().GetField(propertyName);
+            return (T)test.GetValue(obj);
+        }
+
+        /// <summary>
+        /// Strips namespace until string is just the name of the Type.
+        /// Example: "BatteriesNotIncluded.Framework.Arena" would just become "Arena"
+        /// </summary>
+        public static string StripNamespace(this Type type) => type.ToString().Split('.').Last();
     }
 }

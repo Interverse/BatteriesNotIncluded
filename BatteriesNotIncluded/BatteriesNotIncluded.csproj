@@ -42,7 +42,7 @@
     <Reference Include="MySql.Data">
       <HintPath>references\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>references\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -65,14 +65,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="Framework\Commands\Join.cs" />
+    <Compile Include="Framework\Commands\Quit.cs" />
+    <Compile Include="Framework\Commands\Start.cs" />
+    <Compile Include="Framework\Managers\ArenaManager.cs" />
+    <Compile Include="Framework\Managers\CommandManager.cs" />
+    <Compile Include="Framework\Arena.cs" />
     <Compile Include="Framework\Database.cs" />
-    <Compile Include="Framework\Minigame.cs" />
+    <Compile Include="Framework\Extensions\TSPlayerExtension.cs" />
+    <Compile Include="Framework\Commands\ICommand.cs" />
+    <Compile Include="Framework\MinigameTypes\EndgameMinigame.cs" />
+    <Compile Include="Framework\MinigameTypes\Minigame.cs" />
     <Compile Include="Framework\MiscUtils.cs" />
+    <Compile Include="Framework\Network\DataHandler.cs" />
+    <Compile Include="Framework\Network\Packets\ItemOwnerArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ModifyTilesArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerDeathArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerHurtArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerSlotArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerSpawnArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerTeamArgs.cs" />
+    <Compile Include="Framework\Network\Packets\PlayerUpdateArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ProjectileDestroyArgs.cs" />
+    <Compile Include="Framework\Network\Packets\ProjectileNewArgs.cs" />
+    <Compile Include="Framework\Network\Packets\TerrariaPacket.cs" />
+    <Compile Include="Framework\Network\Packets\TogglePvPArgs.cs" />
+    <Compile Include="Framework\Commands\SetupArena.cs" />
+    <Compile Include="Framework\SidebarInterface.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Minigames\CTF\CTF.cs" />
+    <Compile Include="Minigames\CTF\CTFArena.cs" />
+    <Compile Include="Minigames\Duel\Duel.cs" />
+    <Compile Include="Minigames\Duel\DuelArena.cs" />
+    <Compile Include="Minigames\Duel\DuelCommand.cs" />
+    <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
+    <Compile Include="Minigames\Splatoon\Splatoon.cs" />
+    <Compile Include="Minigames\Splatoon\SplatoonArena.cs" />
+    <Compile Include="Minigames\TDM\TDM.cs" />
+    <Compile Include="Minigames\TDM\TDMArena.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Minigames\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

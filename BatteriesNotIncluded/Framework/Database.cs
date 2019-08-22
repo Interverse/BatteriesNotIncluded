@@ -17,6 +17,7 @@ namespace BatteriesNotIncluded.Framework {
         private readonly string _name;
 
         public IDbConnection db;
+        private SqlTableCreator _sqlCreator;
 
         public Database(string name) {
             _name = name;
@@ -26,9 +27,10 @@ namespace BatteriesNotIncluded.Framework {
         /// Connects the mysql/sqlite database for the plugin, creating one if the database doesn't already exist.
         /// </summary>
         public Database ConnectDB() {
-            if (TShock.Config.StorageType.ToLower() == "sqlite")
+            //if (TShock.Config.StorageType.ToLower() == "sqlite")
                 db = new SqliteConnection(string.Format("uri=file://{0},Version=3",
                     Path.Combine(TShock.SavePath, $"{_name}.sqlite")));
+            /*
             else if (TShock.Config.StorageType.ToLower() == "mysql") {
                 try {
                     var host = TShock.Config.MySqlHost.Split(':');
@@ -46,21 +48,18 @@ namespace BatteriesNotIncluded.Framework {
                 }
             } else
                 throw new Exception("Invalid storage type.");
+            */
 
-            var sqlCreator = new SqlTableCreator(db,
+            _sqlCreator = new SqlTableCreator(db,
                 IsMySql
                     ? (IQueryBuilder)new MysqlQueryCreator()
                     : (IQueryBuilder)new SqliteQueryCreator());
-
-            foreach (var table in _tables) {
-                sqlCreator.EnsureTableStructure(table);
-            }
 
             return this;
         }
 
         public Database CreateTable(SqlTable table) {
-            _tables.Add(table);
+            _sqlCreator.EnsureTableStructure(table);
             return this;
         }
 
@@ -98,8 +97,8 @@ namespace BatteriesNotIncluded.Framework {
         /// </summary>
         /// <param name="table">The table to delete from</param>
         /// <param name="id">The ID of the data being deleted</param>
-        public void DeleteRow(string table, int id) {
-            Query("DELETE FROM {0} WHERE ID = {1}".SFormat(table, id));
+        public void DeleteRow(string table, string name) {
+            Query("DELETE FROM {0} WHERE Name = {1}".SFormat(table, name.SqlString()));
         }
 
         /// <summary>

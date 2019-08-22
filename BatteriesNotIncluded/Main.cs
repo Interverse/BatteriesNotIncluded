@@ -10,6 +10,7 @@ using BatteriesNotIncluded.Framework.MinigameTypes;
 using BatteriesNotIncluded.Framework.Network;
 using TerrariaApi.Server;
 using TShockAPI;
+using TShockAPI.Hooks;
 
 namespace BatteriesNotIncluded {
     [ApiVersion(2, 1)]
@@ -19,6 +20,7 @@ namespace BatteriesNotIncluded {
         public static CommandManager CommandManager;
         public static Database ArenaDatabase;
         public static Main Instance;
+        public static Config Config;
 
         public override string Name => "BatteriesNotIncluded";
         public override string Author => "Johuan";
@@ -30,9 +32,15 @@ namespace BatteriesNotIncluded {
         public override void Initialize() {
             Instance = this;
 
+            Config = Config.Read(Config.ConfigPath);
+            if (!File.Exists(Config.ConfigPath)) {
+                Config.Write(Config.ConfigPath);
+            }
+
             ArenaDatabase = new Database("GamemodeArenas").ConnectDB();
             ArenaManager = new ArenaManager();
             CommandManager = new CommandManager();
+            GeneralHooks.ReloadEvent += OnReload;
 
             ServerApi.Hooks.NetGetData.Register(this, GetData);
         }
@@ -44,8 +52,13 @@ namespace BatteriesNotIncluded {
                 }
 
                 ServerApi.Hooks.NetGetData.Deregister(this, GetData);
+                GeneralHooks.ReloadEvent -= OnReload;
             }
             base.Dispose(disposing);
+        }
+
+        private void OnReload(ReloadEventArgs e) {
+            Config = Config.Read(Config.ConfigPath);
         }
 
         /// <summary>

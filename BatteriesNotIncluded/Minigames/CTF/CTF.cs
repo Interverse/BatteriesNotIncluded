@@ -23,8 +23,6 @@ namespace BatteriesNotIncluded.Minigames.CTF {
         private TSPlayer _redFlagHolder;
         private TSPlayer _blueFlagHolder;
 
-        private int _winAmount = 750;
-
         public CTF(Arena arena) : base(arena) { }
 
         public override void StartGame() {

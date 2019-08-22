@@ -12,8 +12,9 @@ namespace BatteriesNotIncluded.Framework {
         /// </summary>
         /// <param Name="player"></param>
         public static void DisplayInterface(this TSPlayer player, string header = "", string body = "") {
-            StringBuilder sb = new StringBuilder();
+            if (!Main.Config.EnableScorebar) return;
 
+            StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(MiscUtils.LineBreaks(8));
             sb.AppendLine(header);

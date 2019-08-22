@@ -130,7 +130,6 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                 }
             }
             
-            /*
             _scoreboardTick++;
             if (_scoreboardTick / 60 == 1) {
                 string personWinning = _challengerScore > _opponentScore ? challenger.Name + " is winning!" : opponent.Name + " is winning!";
@@ -145,18 +144,17 @@ namespace BatteriesNotIncluded.Minigames.Duel {
                 }
                 _scoreboardTick = 0;
             }
-            */
         }
         public override bool InsufficientPlayers() {
             return Players.Count < 2;
         }
 
         public override bool HasFinished() {
-            return _challengerScore == 5 || _opponentScore == 5;
+            return _challengerScore == Main.Config.DuelMaxScore || _opponentScore == Main.Config.DuelMaxScore;
         }
 
         public override void OnFinished() {
-            string winner = _challengerScore == 5 ? challenger.Name : opponent.Name;
+            string winner = _challengerScore == Main.Config.DuelMaxScore ? challenger.Name : opponent.Name;
 
             string scoreMessage = $"{winner} has won the duel! {_scoreText}";
 

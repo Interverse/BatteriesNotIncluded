@@ -42,7 +42,7 @@
     <Reference Include="MySql.Data">
       <HintPath>references\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>references\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Framework\Commands\Join.cs" />
     <Compile Include="Framework\Commands\Quit.cs" />
     <Compile Include="Framework\Commands\Start.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Minigames\Duel\TSPlayerDuelExtension.cs" />
     <Compile Include="Minigames\Splatoon\Splatoon.cs" />
     <Compile Include="Minigames\Splatoon\SplatoonArena.cs" />
+    <Compile Include="Minigames\TDM\TDM.cs" />
+    <Compile Include="Minigames\TDM\TDMArena.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

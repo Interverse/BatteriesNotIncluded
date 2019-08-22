@@ -21,9 +21,8 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
 
         private DateTime _gameStart;
         private DateTime _lastGameTimeAnnounce;
-        private DateTime _gameDuration = new DateTime().AddMinutes(3); // 3 minutes
-        private int _minutes = 3;
-        private int _matchTimeCounter = 3;
+        private DateTime _gameDuration = new DateTime().AddSeconds(Main.Config.SplatoonTimerInSeconds);
+        private int _matchTimeCounter = Main.Config.SplatoonTimerInSeconds;
 
         private int _redScore = 0;
         private int _blueScore = 0;
@@ -36,8 +35,6 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
 
         private int _tilesPerUpdate = 100;
         private int _tilesUpdated = 0;
-
-        private int _winAmount = 750;
 
         private string _score => $"(Red: {(_redScore / _totalPaintSpots * 100).ToString("0.##")}%, Blue: {(_blueScore / _totalPaintSpots * 100).ToString("0.##")}%)";
 
@@ -69,10 +66,10 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
         public override void OnRunning() {
             if ((DateTime.Now - _lastGameTimeAnnounce).TotalSeconds >= 60) {
                 _lastGameTimeAnnounce = DateTime.Now;
-                _matchTimeCounter--;
+                _matchTimeCounter -= 60;
 
                 if (_matchTimeCounter > 0) {
-                    SendMessageToAllPlayers($"(Splatoon) {_matchTimeCounter} minutes remain! {_score}");
+                    SendMessageToAllPlayers($"(Splatoon) {_matchTimeCounter} seconds remain! {_score}");
                 }
             }
 
@@ -147,7 +144,7 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
         }
 
         public override bool HasFinished() {
-            return (DateTime.Now - _gameStart).TotalMinutes >= _minutes;
+            return (DateTime.Now - _gameStart).TotalSeconds >= Main.Config.SplatoonTimerInSeconds;
         }
 
         public override bool InsufficientPlayers() {
@@ -165,15 +162,11 @@ namespace BatteriesNotIncluded.Minigames.Splatoon {
                 winText += "Red team wins! ";
                 foreach (var winner in RedTeam) {
                     winners.Add(winner.Name);
-
-                    winner.SendInfoMessage($"You gained {_winAmount} RP for winning.");
                 }
             } else if (_blueScore > _redScore) {
                 winText += "Blue team wins!";
                 foreach (var winner in BlueTeam) {
                     winners.Add(winner.Name);
-
-                    winner.SendInfoMessage($"You gained {_winAmount} RP for winning.");
                 }
             } else {
                 winText += "It was a tie!";

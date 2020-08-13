@@ -96,6 +96,10 @@
     <Compile Include="Main.cs" />
     <Compile Include="Minigames\CTF\CTF.cs" />
     <Compile Include="Minigames\CTF\CTFArena.cs" />
+    <Compile Include="Minigames\Doubles\Doubles.cs" />
+    <Compile Include="Minigames\Doubles\DoublesArena.cs" />
+    <Compile Include="Minigames\Doubles\DoublesCommand.cs" />
+    <Compile Include="Minigames\Doubles\TSPlayerDoublesExtension.cs" />
     <Compile Include="Minigames\Duel\Duel.cs" />
     <Compile Include="Minigames\Duel\DuelArena.cs" />
     <Compile Include="Minigames\Duel\DuelCommand.cs" />

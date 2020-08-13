@@ -7,6 +7,8 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
     public class PlayerUpdateArgs : TerrariaPacket {
         public int PlayerAction;
         public int Pulley;
+        public int Misc;
+        public int SleepingInfo;
         public int SelectedSlot;
         public float PositionX;
         public float PositionY;
@@ -15,8 +17,10 @@ namespace BatteriesNotIncluded.Framework.Network.Packets {
 
         public PlayerUpdateArgs(MemoryStream data, TSPlayer player) : base(player) {
             data.ReadByte(); // Player ID
-            PlayerAction = data.ReadByte();
+            PlayerAction = data.ReadByte(); // Named "Control" in TShock docs
             Pulley = data.ReadByte();
+            Misc = data.ReadByte();
+            SleepingInfo = data.ReadByte();
             SelectedSlot = data.ReadByte();
             PositionX = data.ReadSingle();
             PositionY = data.ReadSingle();

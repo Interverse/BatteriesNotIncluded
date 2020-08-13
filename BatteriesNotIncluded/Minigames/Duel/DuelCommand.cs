@@ -30,7 +30,7 @@ namespace BatteriesNotIncluded.Minigames.Duel {
             }
 
             // If challenging someone
-            var playersFound = TShock.Utils.FindPlayer(input[0]);
+            var playersFound = TSPlayer.FindByNameOrID(input[0]);
 
             if (playersFound.Count > 1) {
                 args.Player.SendMessage("Multiple players found: ", Color.Yellow);

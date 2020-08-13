@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using Terraria;
+using TShockAPI;
 
 namespace BatteriesNotIncluded.Framework {
     public static class MiscUtils {
@@ -96,6 +98,32 @@ namespace BatteriesNotIncluded.Framework {
                 obj = default(object);
                 return false;
             }
+        }
+
+        public static bool FindPlayer(TShockAPI.TSPlayer player, string name, out TShockAPI.TSPlayer found) {
+            var playersFound = TSPlayer.FindByNameOrID(name);
+            found = default;
+
+            if (playersFound.Count > 1) {
+                player.SendMessage("Multiple players found: ", Color.Yellow);
+                foreach (var foundPlayer in playersFound) {
+                    player.SendMessage(foundPlayer.Name, Color.Yellow);
+                }
+                return false;
+            } else if (playersFound.Count == 0) {
+                player.SendErrorMessage("No players found!");
+                return false;
+            }
+
+            var opponent = TShockAPI.TShock.Players[playersFound[0].Index];
+
+            if (player.Name == opponent.Name) {
+                player.SendErrorMessage("Found yourself.");
+                return false;
+            }
+
+            found = opponent;
+            return true;
         }
 
         /// <summary>
